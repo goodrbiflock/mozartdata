@@ -1,0 +1,38 @@
+name: Preprocess SQL Files
+
+on:
+  push:
+    branches:
+      - Yaml_Test_1
+  pull_request:
+    branches:
+      - Yaml_Test_1  
+permissions:
+  contents: write
+jobs:
+  preprocess:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Run Preprocess Script
+        run: |
+          python -m pip install --upgrade pip
+          pip install --upgrade setuptools
+          python preprocess_sql.py
+
+      - name: Commit changes
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+          git add .
+          git commit -m "Remove CREATE OR REPLACE TABLE statements"
+          git push
+        if: success()

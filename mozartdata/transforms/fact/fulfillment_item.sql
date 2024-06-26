@@ -1,3 +1,4 @@
+
 WITH ss_qty AS (SELECT fulfillment_id_edw,
 					   order_id_edw,
 					   sku,
